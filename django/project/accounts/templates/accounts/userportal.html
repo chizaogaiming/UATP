@@ -1,0 +1,292 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+
+<!--new <link rel="stylesheet" href=" {% static '/css/userportal.css' %} ">-->
+{% block content %}
+
+<style>
+#accesshiddenform{
+    display : none;
+}
+#employeehiddenform{
+    display : none;
+}
+
+div.all{
+    width:50%;
+    margin:auto;
+    background-color: #fff;
+}
+input{
+    border-radius: 7px;
+    border-color: rgb(224, 225, 226);
+}
+#update{
+    border-style: groove;
+}
+button{
+    border-radius: 7px;
+    border-color: rgb(212, 215, 218);
+    border: outset;
+}
+.message{
+    width: 100%;
+}
+td{
+    border:1px;
+    padding: 10px;
+    max-width: 50%;
+}
+.update{
+    border-color: rgb(212, 215, 218);
+    border: outset;
+    position:relative;
+    bottom:87px;
+}
+
+p{
+    position:relative;
+    left: 20px;
+}
+td.label{
+    padding-right: 5px;
+}
+
+.back{
+    position:relative;
+    bottom: 132px;
+    left:80px;
+}
+.rights{
+    font-size: small;
+    color: red;
+}
+.w3-card{
+    width: 50%;
+    margin:auto;
+    position:relative;
+    top: 150px;
+    background-color: #fff;
+}
+table{
+    margin-left: 50px;
+}
+label{
+    padding-right: 70px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+#access{
+    border: 4px outset #f4f0ec;
+    border-radius: 30px;
+    margin: 10px;
+    margin-left: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 5px;
+}
+.search_label{
+    position: relative;
+    right: 10px;
+}
+.search_input{
+    position: relative;
+    right: 40px;
+}
+.moveup1{
+    position:relative;
+    bottom:30px;
+}
+.moveup2{
+    position:relative;
+    bottom:60px;
+}
+.moveup3{
+    position:relative;
+    bottom:90px;
+}
+.moveup4{
+    position:relative;
+    bottom:90px;
+}
+
+</style>
+<div class="w3-card">
+    <div class="w3-container">
+        <div class="message">
+            <!--message-->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <br>
+        <div>
+            <h2 style=font-weight:bold;margin-left:30px;>User Information</h2>
+        </div>
+        <hr>
+        <div>
+            <table>
+                <tr>
+                    <td><label class="search_label" for="">EmployeeName: </label></td>
+                    <td>
+                        <div>
+                            <!--search employeeid-->
+                            <form method="POST" action="" >
+                                {% csrf_token %}
+                                <input class="search_input" list="employee" name="employeename" placeholder="ID/EmployeeName"/>
+                                <datalist id="employee" name="employee">
+                                    <option value=''></option>
+                                    {% for values in employees %}
+                                        <option value={{values}}>{{values}}</option>
+                                    {% endfor %}
+                                </datalist>
+                        
+                                <input type="submit" name="submit" value="Search">
+                                </form>
+                        </div>
+                    </td>
+                </tr>
+    
+                <tr>
+                    <td class="label">ID: </td>
+                    <td class="info">{{employee.id}}</td>
+                </tr>
+                <tr>
+                    <td class="label">Name: </td>
+                    <td class="info">{{employee.employeeName}}</td>
+                </tr>
+                <tr>
+                    <td class="label">Email: </td>
+                    <td class="info">{{employee.employeeEmail}}</td>
+                </tr>
+                <tr>
+                    <td class="label">Department: </td>
+                    <td class="info">{{employee.employeeDepartment}}</td>
+                </tr>
+                <tr>
+                    <td class="label">Current Access: </td>
+                    <td class="info">
+                        {% for x,y in dic %}
+                            <label for="" id="access">{{x}} <span class="rights">{{y}}</span></label>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">Notes: </td>
+                    <td class="info">{{employee.employeeNotes}}</td>
+                </tr>
+            </table>
+            <!--show employee information-->
+        </div>
+        <br>
+        <div>
+            <h2 style=font-weight:bold;margin-left:30px;>Grant Access</h2>
+        </div>
+        <hr>
+        <div>
+            <!--search employeeid-->
+            <form method="POST" action="" >
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td><label for="" id="employeeform">Act To:</label></td>
+                        <td>
+                            <input list="employee" name="grantTo" placeholder="ID/EmployeeName"/>
+                            <button class="btn" id='addEmployee' type='button' name="plus" value='plus'><i class="fa fa-plus"></i></button>
+                            <div id="employeeFormTarget">
+                                <!--act to-->
+                                <datalist id="employee" name="employee">
+                                    <option value=''></option>
+                                    {% for values in employees %}
+                                        <option value={{values}}>{{values}}</option>
+                                    {% endfor %}
+                                </datalist>
+                                <label for="" id="employeehiddenform"><input list="employee" name="grantTo" placeholder="EmployeeName"/></label>
+                                </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="moveup4" for="">Action:</label></td>
+                        <td>
+                            <input type="radio" id="Write" name="action" value="Write">
+                            <label for="">Write</label><br>
+                            <input class="moveup1" type="radio" id="ReadOnly" name="action" value="ReadOnly">
+                            <label class="moveup1" for="">ReadOnly</label><br>
+                            <input class="moveup2" type="radio" id="Expire" name="action" value="Expire">
+                            <label class="moveup2" for="">Expire</label><br>
+                            <input class="moveup3" type="radio" id="Revoke" name="action" value="Revoke">
+                            <label class="moveup3" for="">Revoke</label><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="moveup4" for="" id="accessform">Access Name:</label></td>
+                        <td>
+                            <input class="moveup4" list="access" name="accessName" placeholder="AccessName"/>
+                            <button style="position: relative;bottom:90px" class="btn" id='addAccess' type='button' name="plus" value='plus'><i class="fa fa-plus"></i></button>
+                            <div id ='accessFormTarget'>
+                                <!--access name-->
+                                <datalist id="access" name="access">
+                                    <option value=''></option>
+                                    {% for values in access %}
+                                        <option value={{values}}>{{values}}</option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                                <!--用来复印的空表-->
+                                <label class='moveup4' for="" id ='accesshiddenform'><input list="access" name="accessName" placeholder="AccessName"/><br></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label class="moveup4" for="">Action Date:</label><br></td>
+                        <td><input class="moveup4" style="width:225px" type="date" id="start" name="actiondate"></td>
+                    </tr>
+                    <tr>
+                        <td>
+    
+                        </td>
+                        <td><input class="update" id='update' type="submit" name="submit" value="Update"></td>
+                    </tr>
+                </table>
+            </form>
+            <div>
+                <form action=""method="GET">
+                <button class="back" type="submit" name="Back" value="Back">Back</button>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+
+<script>
+    const addAccessBtn = document.getElementById('addAccess')
+    addAccessBtn.addEventListener('click',extend_access_form)
+
+    function extend_access_form(event){
+        if (event){
+            event.preventDefault()
+        }
+        const formCopyTarget = document.getElementById('accessFormTarget')
+        const accessForm = document.getElementById('accesshiddenform').cloneNode(true)
+        accessForm.setAttribute('id','accessform')
+        formCopyTarget.append(accessForm)
+    }
+
+    const addEmployeeBtn = document.getElementById('addEmployee')
+    addEmployeeBtn.addEventListener('click',extend_employee_form)
+
+    function extend_employee_form(event){
+        if (event){
+            event.preventDefault()
+        }
+        const formCopyTarget = document.getElementById('employeeFormTarget')
+        const employeeForm = document.getElementById('employeehiddenform').cloneNode(true)
+        employeeForm.setAttribute('id','employeeform')
+        formCopyTarget.append(employeeForm)
+    }
+</script>
+{% endblock %}

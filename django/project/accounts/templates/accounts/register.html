@@ -1,0 +1,99 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+<!--new-->
+{% block content %}
+<link rel="stylesheet" href=" {% static '/css/register.css' %} ">
+<style>
+td{
+    border: 1px;
+    padding:10px;
+}
+input,select{
+    width:225px;
+}
+div.all{
+    margin-left: 150px;
+}
+table{
+    margin-left: 50px;
+}
+.message{
+    width: 100%;
+}
+.w3-card{
+    width: 50%;
+    margin:auto;
+    position:relative;
+    top: 150px;
+    background-color: #fff;
+}
+label{
+    padding-right: 70px;
+}
+</style>
+<div class="w3-card">
+<div class="w3-container">
+    <h2 style="font-weight: bold;margin-left: 30px;">Create User</h2>
+    <hr>
+    <!--form-->
+    <form method="POST" action="" >
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td><label for="id_employeeName">EmployeeName:</label></td>
+                <td><input type="text" name="employeeName"></td>
+            </tr>
+            <tr>
+                <td><label for="id_employeeEmail">EmployeeEmail:</label></td>
+                <td><input type="text" name="employeeEmail"></td>
+            </tr>
+            <tr>
+                <td><label for="id_employeePassword">EmployeePassword:</label></td>
+                <td><input type="password" name="employeePassword"></td>
+            </tr>
+            <tr>
+                <td><label for="id_accountLevel">AccountLevel:</label></td>
+                <td>
+                    <select name="accountLevel" id="id_accountLevel">
+                        <option value="admin">admin</option>
+                        <option value="user">user</option>
+                        <option value="employee" selected="">employee</option>
+                        <option value="dimission">dimission</option>
+                      </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="id_employeeDepartment">EmployeeDepartment:</label></td>
+                <td>
+                    <select name="employeeDepartment" id="id_employeeDepartment">
+                        <option value="IT" selected="">Information Technology</option>
+                        <option value="HR">Human Resources</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="id_employeeNotes">EmployeeNotes:</label></td>
+                <td><input type="text" name="employeeNotes"></td>
+            </tr>
+            <tr>
+                <td><input style="width:100px" type="submit" name="Back" value=" Back "></td>
+                <td><input style="width:100px" type="submit" name="Create" value="Create"></td>
+            </tr>
+        </table>
+
+        <div class="message">
+            <!--message-->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+    </form>
+</div>
+</div>
+{% endblock %}

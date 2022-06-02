@@ -1,0 +1,220 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+<!--new-->
+{% block content %}
+<link rel="stylesheet" href=" {% static '/css/viewhistory.css' %} ">
+<style>
+    table.filter{
+        border:1px;
+        margin-left: 50px;
+    }
+    td.filter{
+        padding: 10px;
+        border: 1px;
+    }
+    td.filter_firstrow{
+        padding: 10px;
+        padding-right: 150px;
+        border: 1px;
+    }
+    .history{
+        border: 0px;
+    }
+    tr.history:nth-child(even){
+        height:50px;
+        background-color: #aaa5a5;
+        color:aliceblue;
+    }
+    tr.head,
+    tr.history:nth-child(odd){
+        height:50px;
+        background-color: #e7e2e2;
+        color:#050505
+    }
+    button{
+        border-color: rgb(212, 215, 218);
+        border: outset;
+    }
+    div.all{
+        width: 80%;
+        margin: 0 auto; 
+    }
+    table.history{
+        width: 100%; 
+        margin: 0 auto;
+        text-align: center;
+    }
+    .w3-card{
+    width: 80%;
+    margin:auto;
+    position:relative;
+    top: 150px;
+    background-color: #fff;
+}
+.pagination{
+    position:relative;
+    right:120px;
+}
+input{
+    width:150px;
+}
+</style>
+
+<div class='w3-card'>
+    <div class="w3-container w3-white">
+        <div class="message">
+            <!--message-->
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                    {{message}}
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    
+        <br>
+    
+        <div>
+            <h2 style=font-weight:bold;margin-left:30px;>History</h2>
+        </div>
+        <hr>
+        <div>
+            <form action="" method="get">
+                <table class="filter">
+                    <tr>
+                        <td class="filter"><h4>Filter:</h4></td>
+                    </tr>
+                    <tr>
+                        <td class="filter"><label for="">Access:</label></td>
+                        <td class="filter_firstrow">
+                            <input list="access" name="accessName" style="width:150px;"/>
+                            <datalist id="access" name="access">
+                                <option value=''></option>
+                                {% for values in access %}
+                                    <option value={{values}}>{{values}}</option>
+                                {% endfor %}
+                            </datalist>
+                        </td>
+                        <td class="filter"><label for="">Action:</label></td>
+                        <td class="filter">
+                            <select id="action" name="action" style="width:150px">
+                                <option value=""></option>
+                                <option value="Write">Write</option>
+                                <option value="ReadOnly">ReadOnly</option>
+                                <option value="Expire">Expire</option>
+                                <option value="Revoke">Revoke</option>
+                            </select><br>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="filter">
+                            <label for="">ActTo:</label>
+                        <td class="filter_firstrow">
+                            <input list="actTo" name="actTo" style="width:150px;"/>
+                            <datalist id="actTo" name="actTo">
+                                <option value=''></option>
+                                {% for values in actto%}
+                                    <option value={{values}}>{{values}}</option>
+                                {% endfor %}
+                            </datalist>
+                        </td>
+    
+                        <td class="filter"><label for="">ActBy:</label></td>
+                        <td class="filter">
+                            <input list="actBy" name="actBy"/>
+                            <datalist id="actBy" name="actBy">
+                                <option value=''></option>
+                                {% for values in actby%}
+                                    <option value={{values}}>{{values}}</option>
+                                {% endfor %}
+                            </datalist>
+                            <!--{{filter.form.actBy}}--><br>
+                        </td>
+                    </tr>
+    
+                    <tr>
+                        <td class="filter"><label for="">DateStartFrom:</label></td>
+                        <td class="filter_firstrow">
+                            <input type="date" id="start" name="start_date">
+                        </td>
+                        <td class="filter"><label for="">DateEndBefore:</label></td>
+                        <td class="filter">
+                            <input type="date" id="end" name="end_date"><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="filter"><button type="submit">Filter</button></td>
+                        <form action="" method="GET">
+                            <td class="filter"><button name="refresh" value="refresh" type="submit">Refresh</button></td>
+                        </form>
+                        
+                    </tr>
+                </table>       
+            </form>
+        </div>
+        <hr>
+        <div>
+            <table class="history">
+                <tr class="head">
+                    <th class="history">History ID</th>
+                    <th class="history">Access</th>
+                    <th class="history">Action</th>
+                    <th class="history">Act To</th>
+                    <th class="history">Act By</th>
+                    <th class="history">Action Date</th>
+                    <th class="history">Record Time</th>
+                </tr>
+    
+                    {% for values in page_obj %}
+                        <tr class="history">
+                            <td class="history">{{values.id}}</td>
+                            <td class="history">{{values.accessName}}</td>
+                            <td class="history">{{values.action}}</td>
+                            <td class="history">{{values.actTo}}</td>
+                            <td class="history">{{values.actBy}}</td>
+                            <td class="history">{{values.actionDate}}</td>
+                            <td class="history">{{values.recordTime}}</td>
+                        </tr>
+                    {% endfor %}
+    
+            </table>
+        </div>
+        <br>
+        <br>
+        <div class="pagination">
+            &nbsp;
+            <span class="step-links" >
+                <span class="previous">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    &nbsp;
+                    <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                </span>
+                &nbsp;
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                &nbsp;&nbsp;
+                <span class="next">
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">next</a>
+                    &nbsp;&nbsp;
+                    <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+                </span>
+            </span>
+        </div>
+        <hr>
+        <div>
+            <form action=""method='GET'>
+    
+                <button class='back' type="submit" name="Back" value="Back">Back</button>
+            </form>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

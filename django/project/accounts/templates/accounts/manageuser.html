@@ -1,0 +1,78 @@
+{%  extends 'accounts/main.html' %}
+{% load static %}
+<!--new-->
+{% block content %}
+<link rel="stylesheet" href=" {% static '/css/manageuser.css' %} ">
+<style>
+input,select{
+    width:225px;
+}
+td{
+    border: 1px;
+    padding:10px;
+}
+div.all{
+    margin-left: 150px;
+}
+.message{
+    width: 100%;
+}
+label{
+    font-weight: lighter;
+    padding-right: 70px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+table{
+    margin-left: 50px;
+}
+.w3-card{
+    width: 50%;
+    margin:auto;
+    position:relative;
+    top: 150px;
+    background-color: #fff;
+}
+.back{
+    width:100px;
+    position:relative;
+    left: 100px;
+    margin-bottom: 10px;
+}
+.update{
+    width:100px;
+    position:relative;
+    left:300px;
+}
+</style>
+<div class="w3-card">
+
+<div class="w3-container">
+    <h2 style=font-weight:bold;margin-left:30px;>Update User</h2>
+    <hr>
+    <!--form-->
+    <table>
+    <form method="POST" action="" >
+        {% csrf_token %}
+        {{form.as_table}}
+    </table>
+    <br>
+        <input class="back" type="submit" name="Back" value=" Back ">
+        <input class="update" type="submit" name="Update" value="Update">
+
+        <div class="message">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                {{message}}
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <!--message-->
+
+    </form>
+
+</div>
+</div>
+{% endblock %}

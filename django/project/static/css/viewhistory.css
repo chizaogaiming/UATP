@@ -1,0 +1,33 @@
+table, th, td {
+    border:1px solid black;
+}    
+.previous{
+      position: absolute;
+      left: 400px;
+}
+.current{
+      position: absolute;
+      left: 575px;
+}
+.next{
+      position: absolute;
+      left: 700px;
+}
+div.all{
+      margin-left: 150px;
+}
+table{
+      width: 80%;
+}
+table.filter{
+      width: 40%;
+}
+td.filter{
+      width: 500px;
+      font-size: small;
+      text-align: left;
+}
+button.back{
+      position:relative;
+      left: 460px;
+}
